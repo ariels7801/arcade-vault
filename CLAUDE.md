@@ -8,14 +8,6 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Online gaming platform (Arcade Vault) — players compete for points. Uses Spec Driven Design via `/spec` and `/spec-impl` skills.
 
-## Commands
-
-```bash
-npm run dev      # dev server (Turbopack, http://localhost:3000)
-npm run build    # production build (also Turbopack)
-npm run start    # start production server
-npm run lint     # ESLint (flat config, eslint.config.mjs)
-```
 
 No test runner configured yet.
 
@@ -24,6 +16,10 @@ No test runner configured yet.
 - **Next.js 16.2.6** — App Router, Turbopack default, React 19.2
 - **Tailwind CSS v4** — PostCSS plugin (`@tailwindcss/postcss`)
 - **TypeScript 5**
+
+## Skills 
+
+Usa siempre /frontend-design para diseñar la interfaz de usuario. 
 
 ## Next.js 16 Breaking Changes
 
