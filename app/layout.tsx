@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import Nav from "./components/Nav";
+import UserProvider from "./components/UserProvider";
 
 export const metadata: Metadata = {
   title: "Arcade Vault",
@@ -8,12 +10,25 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className="h-full">
-      <body className="min-h-full flex flex-col">{children}</body>
+    <html lang="es" className="h-full">
+      <body className="min-h-full flex flex-col">
+        <UserProvider>
+          <div className="av-bg" />
+          <div className="av-noise" />
+          <Nav />
+          <main className="av-main relative z-10">{children}</main>
+          <footer
+            className="relative z-10 border-t text-center py-6"
+            style={{ borderColor: "var(--line)" }}
+          >
+            <span className="pixel text-xs" style={{ color: "var(--ink-faint)", fontSize: "8px" }}>
+              © 2026 ARCADE VAULT — INSERT COIN TO CONTINUE
+            </span>
+          </footer>
+        </UserProvider>
+      </body>
     </html>
   );
 }
