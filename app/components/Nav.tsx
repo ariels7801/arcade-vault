@@ -19,7 +19,7 @@ export default function Nav() {
   return (
     <>
       <nav className="av-nav relative z-50">
-        <Link href="/biblioteca" className="logo">
+        <Link href="/" className="logo">
           <div className="logo-mark" />
           <span className="logo-text neon-cyan">ARCADE VAULT</span>
         </Link>

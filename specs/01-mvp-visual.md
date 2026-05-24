@@ -1,6 +1,6 @@
 ---
 spec: 01-mvp-visual
-state: Approve
+state: Implement
 date: 2026-05-20
 depends-on: —
 objective: Implementar las 5 pantallas visuales de Arcade Vault (Biblioteca, Detalle, Reproductor mock, Auth, Salón de la Fama) en Next.js 16 con App Router y estilos retro/CRT portados del template HTML.
