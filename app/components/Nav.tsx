@@ -14,6 +14,7 @@ export default function Nav() {
     { href: "/biblioteca", label: "BIBLIOTECA" },
     { href: "/salon", label: "SALÓN" },
     { href: "/auth", label: "AUTH" },
+    { href: "/acerca-de", label: "ACERCA DE" },
   ];
 
   return (
