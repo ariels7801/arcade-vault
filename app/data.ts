@@ -113,6 +113,17 @@ export const GAMES: Game[] = [
     best: 99999,
     plays: "11.8K",
   },
+  {
+    id: "asteroides",
+    title: "ASTEROIDES",
+    short: "El clásico shooter espacial, sin filtros.",
+    long: "Pilotea tu nave a través de campos de roca a la deriva. Destrúyelos antes de que te destruyan a ti, recoge el power-up de disparo triple y sobrevive oleada tras oleada. Cada nivel suma más rocas y menos margen de error.",
+    cat: "SHOOTER",
+    cover: "cover-asteroides",
+    color: "cyan",
+    best: 221400,
+    plays: "33.5K",
+  },
 ];
 
 export const CATS: string[] = ["TODOS", "ARCADE", "PUZZLE", "SHOOTER", "VERSUS"];

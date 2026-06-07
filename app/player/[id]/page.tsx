@@ -4,6 +4,7 @@ import Link from "next/link";
 import React, { use, useEffect, useState } from "react";
 import { GAMES } from "../../data";
 import { useUser } from "../../components/UserProvider";
+import AsteroidsCanvas from "../../../lib/games/asteroids/AsteroidsCanvas";
 
 export default function PlayerPage({
   params,
@@ -13,9 +14,10 @@ export default function PlayerPage({
   const { id } = use(params);
   const game = GAMES.find((g) => g.id === id);
   const { user } = useUser();
+  const isAsteroides = game?.id === "asteroides";
 
   const [score, setScore] = useState(0);
-  const [lives] = useState(3);
+  const [lives, setLives] = useState(3);
   const [level, setLevel] = useState(1);
   const [paused, setPaused] = useState(false);
   const [gameOver, setGameOver] = useState(false);
@@ -23,7 +25,7 @@ export default function PlayerPage({
   const [saved, setSaved] = useState(false);
 
   useEffect(() => {
-    if (paused || gameOver) return;
+    if (isAsteroides || paused || gameOver) return;
     const id = setInterval(() => {
       setScore((prev) => {
         const next = prev + Math.floor(Math.random() * 47 + 13);
@@ -32,7 +34,12 @@ export default function PlayerPage({
       });
     }, 80);
     return () => clearInterval(id);
-  }, [paused, gameOver]);
+  }, [isAsteroides, paused, gameOver]);
+
+  function handleAsteroidsGameOver(finalScore: number) {
+    setScore(finalScore);
+    setGameOver(true);
+  }
 
   function handlePause() {
     setPaused((p) => !p);
@@ -96,29 +103,40 @@ export default function PlayerPage({
       {/* CRT */}
       <div className="crt">
         <div className="crt-screen">
-          <div className="game-arena">
-            <div className="grid-floor" />
-            <div className="player-ship" />
-            <div className="enemy e1" />
-            <div className="enemy e2" />
-            <div className="enemy e3" />
-            {paused && (
-              <div
-                style={{
-                  position: "absolute",
-                  inset: 0,
-                  background: "rgba(0,0,0,0.6)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <span className="pixel neon-yellow" style={{ fontSize: "20px", letterSpacing: "0.2em" }}>
-                  PAUSA
-                </span>
-              </div>
-            )}
-          </div>
+          {isAsteroides ? (
+            <AsteroidsCanvas
+              paused={paused}
+              onScoreChange={setScore}
+              onLivesChange={setLives}
+              onLevelChange={setLevel}
+              onGameOver={handleAsteroidsGameOver}
+            />
+          ) : (
+            <div className="game-arena">
+              <div className="grid-floor" />
+              <div className="player-ship" />
+              <div className="enemy e1" />
+              <div className="enemy e2" />
+              <div className="enemy e3" />
+            </div>
+          )}
+          {paused && (
+            <div
+              style={{
+                position: "absolute",
+                inset: 0,
+                background: "rgba(0,0,0,0.6)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                zIndex: 10,
+              }}
+            >
+              <span className="pixel neon-yellow" style={{ fontSize: "20px", letterSpacing: "0.2em" }}>
+                PAUSA
+              </span>
+            </div>
+          )}
         </div>
         <div className="crt-bottom">
           <span className="led">PLAYING: {game.title}</span>

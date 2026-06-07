@@ -488,6 +488,27 @@ a { color: inherit; text-decoration: none; }
   text-shadow: 0 0 8px var(--yellow);
 }
 
+.cover-asteroides { background:
+  radial-gradient(circle at 80% 20%, var(--cyan) 0 2px, transparent 3px),
+  radial-gradient(circle at 18% 70%, #fff 0 1.5px, transparent 2.5px),
+  radial-gradient(circle at 60% 85%, #fff 0 1.5px, transparent 2.5px),
+  radial-gradient(circle at 35% 30%, var(--cyan) 0 1.5px, transparent 2.5px),
+  linear-gradient(160deg, #001022, #05020a); }
+.cover-asteroides::after {
+  content: "";
+  position: absolute; inset: 0;
+  background: linear-gradient(135deg, #6b6b78, #3a3a46);
+  clip-path: polygon(22% 38%, 38% 20%, 60% 26%, 70% 46%, 54% 64%, 30% 60%);
+  filter: drop-shadow(0 0 10px rgba(0,245,255,0.2));
+}
+.cover-asteroides::before {
+  content: "▲";
+  position: absolute; left: 64%; top: 56%;
+  color: var(--cyan); font-size: 16px;
+  transform: rotate(115deg);
+  text-shadow: 0 0 8px var(--cyan);
+}
+
 .cover-rana { background: linear-gradient(180deg,#001f2a,#0a0a18); }
 .cover-rana::after {
   content: "";
@@ -708,6 +729,60 @@ a { color: inherit; text-decoration: none; }
 .game-arena .e3 { top: 14%; left: 50%; background: var(--yellow); box-shadow: 0 0 8px var(--yellow); animation: drift 2.8s ease-in-out infinite; }
 @keyframes drift {
   50% { transform: translate(20px, 10px); }
+}
+
+/* touch controls overlay (asteroides) */
+.touch-controls {
+  display: none;
+  position: absolute; inset: 0;
+  align-items: flex-end; justify-content: space-between;
+  padding: 18px;
+  pointer-events: none;
+  z-index: 5;
+}
+@media (pointer: coarse) {
+  .touch-controls { display: flex; }
+}
+.touch-cluster {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  pointer-events: auto;
+}
+.touch-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  font-size: 18px;
+  font-family: var(--pixel);
+  color: var(--ink-dim);
+  background: rgba(5, 5, 9, 0.55);
+  border: 1px solid var(--ink-faint);
+  border-radius: 50%;
+  box-shadow: 0 0 0 transparent, inset 0 0 0 transparent;
+  cursor: pointer;
+  user-select: none;
+  touch-action: none;
+  transition: color 120ms ease, border-color 120ms ease, box-shadow 120ms ease;
+}
+.touch-btn:active {
+  color: var(--cyan);
+  border-color: var(--cyan);
+  box-shadow: 0 0 14px rgba(0,245,255,0.55), inset 0 0 8px rgba(0,245,255,0.35);
+}
+.touch-btn-fire {
+  width: 64px;
+  height: 64px;
+  font-size: 22px;
+  border-color: var(--magenta);
+  color: var(--magenta);
+}
+.touch-btn-fire:active {
+  color: var(--magenta);
+  border-color: var(--magenta);
+  box-shadow: 0 0 16px rgba(255,0,110,0.6), inset 0 0 10px rgba(255,0,110,0.4);
 }
 
 /* game over modal */
