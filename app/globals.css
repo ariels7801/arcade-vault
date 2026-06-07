@@ -994,7 +994,17 @@ a { color: inherit; text-decoration: none; }
   to { opacity: 1; transform: translateY(0); }
 }
 
+.hall-table--global .th,
+.hall-table--global .tr {
+  grid-template-columns: 60px 1fr 1fr 120px 100px;
+}
+
 @media (max-width: 720px) {
+  .hall-table--global .th,
+  .hall-table--global .tr { grid-template-columns: 44px 1fr 0 90px 72px; }
+  .hall-table--global .th span:nth-child(3),
+  .hall-table--global .tr span:nth-child(3) { display: none; }
+
   .hall-table .th, .hall-table .tr { grid-template-columns: 50px 1fr 90px 90px; font-size: 12px; padding: 10px 12px; }
   .av-grid { padding: 0 16px; }
   .av-hero { padding: 36px 16px 16px; }

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Nav from "./components/Nav";
 import UserProvider from "./components/UserProvider";
+import ScoresMigrator from "./components/ScoresMigrator";
 
 export const metadata: Metadata = {
   title: "Arcade Vault",
@@ -17,6 +18,7 @@ export default function RootLayout({
         <UserProvider>
           <div className="av-bg" />
           <div className="av-noise" />
+          <ScoresMigrator />
           <Nav />
           <main className="av-main relative z-10">{children}</main>
           <footer
