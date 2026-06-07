@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
-import { GAMES } from "./data";
+import { useEffect, useState } from "react";
+import type { Game } from "@/lib/types";
+import { createClient } from "@/lib/supabase/client";
 import { useReveal } from "./hooks/useReveal";
 import { FloatingSilhouettes } from "./components/FloatingSilhouettes";
 
@@ -88,6 +89,13 @@ function topRowClass(i: number) {
 export default function Home() {
   useReveal();
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [games, setGames] = useState<Game[]>([]);
+
+  useEffect(() => {
+    createClient().from("games").select("*").limit(6).then(({ data }) => {
+      if (data) setGames(data as Game[]);
+    });
+  }, []);
 
   return (
     <div className="home fade-in">
@@ -142,7 +150,7 @@ export default function Home() {
           <div className="section-rule"></div>
         </div>
         <div className="mini-rail">
-          {GAMES.slice(0, 6).map((g) => (
+          {games.map((g) => (
             <Link key={g.id} href={`/detalle/${g.id}`} className="mini-card">
               <div className="mini-cover"><div className={`cover-bg ${g.cover}`}></div></div>
               <div className="mini-meta">

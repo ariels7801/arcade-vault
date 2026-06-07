@@ -1,28 +1,6 @@
-export type GameColor = "cyan" | "magenta" | "green" | "yellow";
-export type GameCategory = "ARCADE" | "PUZZLE" | "SHOOTER" | "VERSUS";
-
-export interface Game {
-  id: string;
-  title: string;
-  short: string;
-  long: string;
-  cat: GameCategory;
-  cover: string;
-  color: GameColor;
-  best: number;
-  plays: string;
-}
-
-export interface ScoreRow {
-  rank: number;
-  name: string;
-  score: number;
-  date: string;
-}
-
-export interface User {
-  name: string;
-}
+// Tipos movidos a lib/types.ts — data.ts ya no es la fuente de verdad para juegos
+import type { GameColor, GameCategory, Game, ScoreRow, User } from "@/lib/types";
+export type { GameColor, GameCategory, Game, ScoreRow, User };
 
 export const GAMES: Game[] = [
   {

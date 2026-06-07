@@ -1,31 +1,73 @@
 "use client";
 
-import { useState } from "react";
-import { GAMES, seededScores } from "../data";
-import { useUser } from "../components/UserProvider";
+import { useEffect, useState } from "react";
+import { createClient } from "@/lib/supabase/client";
+import type { Game } from "@/lib/types";
+
+interface ScoreEntry {
+  id: string;
+  game_id: string;
+  player_name: string;
+  score: number;
+  created_at: string;
+  games: { title: string } | null;
+}
+
+const GLOBAL_ID = "__global__";
+
+function formatDate(iso: string) {
+  const d = new Date(iso);
+  return `${String(d.getDate()).padStart(2, "0")}/${String(d.getMonth() + 1).padStart(2, "0")}/${d.getFullYear()}`;
+}
+
+function rankClass(i: number) {
+  if (i === 0) return "top1";
+  if (i === 1) return "top2";
+  if (i === 2) return "top3";
+  return "";
+}
 
 export default function SalonPage() {
-  const { user } = useUser();
-  const [activeGame, setActiveGame] = useState(GAMES[0].id);
+  const [games, setGames] = useState<Game[]>([]);
+  const [activeGame, setActiveGame] = useState(GLOBAL_ID);
+  const [scores, setScores] = useState<ScoreEntry[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const scores = seededScores(
-    activeGame.charCodeAt(0) + activeGame.charCodeAt(1),
-    12
-  );
+  useEffect(() => {
+    createClient()
+      .from("games")
+      .select("*")
+      .order("title")
+      .then(({ data }) => {
+        if (data) setGames(data as Game[]);
+      });
+  }, []);
+
+  useEffect(() => {
+    setLoading(true);
+    const supabase = createClient();
+    const query =
+      activeGame === GLOBAL_ID
+        ? supabase
+            .from("scores")
+            .select("*, games(title)")
+            .order("score", { ascending: false })
+            .limit(20)
+        : supabase
+            .from("scores")
+            .select("*, games(title)")
+            .eq("game_id", activeGame)
+            .order("score", { ascending: false })
+            .limit(20);
+
+    query.then(({ data }) => {
+      setScores((data ?? []) as ScoreEntry[]);
+      setLoading(false);
+    });
+  }, [activeGame]);
 
   const top3 = scores.slice(0, 3);
-  const userInTop = user ? scores.some((r) => r.name === user.name) : false;
-  const userRow = user
-    ? {
-        rank: 13,
-        name: user.name,
-        score: Math.floor(scores[11].score * 0.7),
-        date: "HOY",
-      }
-    : null;
-
-  const rankClass = (i: number) =>
-    i === 0 ? "top1" : i === 1 ? "top2" : i === 2 ? "top3" : "";
+  const isGlobal = activeGame === GLOBAL_ID;
 
   return (
     <div className="av-hall fade-in">
@@ -34,9 +76,15 @@ export default function SalonPage() {
         <p>LOS MEJORES DE ARCADE VAULT</p>
       </div>
 
-      {/* Game tabs */}
+      {/* Game selector tabs */}
       <div className="hall-tabs">
-        {GAMES.map((g) => (
+        <button
+          className={`chip${activeGame === GLOBAL_ID ? " active" : ""}`}
+          onClick={() => setActiveGame(GLOBAL_ID)}
+        >
+          GLOBAL
+        </button>
+        {games.map((g) => (
           <button
             key={g.id}
             className={`chip${activeGame === g.id ? " active" : ""}`}
@@ -47,67 +95,93 @@ export default function SalonPage() {
         ))}
       </div>
 
-      {/* Podium — silver | gold | bronze */}
-      <div className="podium">
-        <div className="podium-slot silver">
-          <div className="rank-num">#2</div>
-          <div className="name">{top3[1].name}</div>
-          <div className="score">{top3[1].score.toLocaleString()}</div>
-          <div className="date">{top3[1].date}</div>
+      {loading ? (
+        <div style={{ textAlign: "center", padding: "80px 0" }}>
+          <div className="spinner" />
         </div>
-        <div className="podium-slot gold">
-          <div className="rank-num">#1</div>
-          <div className="name">{top3[0].name}</div>
-          <div className="score">{top3[0].score.toLocaleString()}</div>
-          <div className="date">{top3[0].date}</div>
+      ) : scores.length === 0 ? (
+        <div
+          style={{
+            textAlign: "center",
+            padding: "80px 0",
+            fontFamily: "var(--pixel)",
+            fontSize: "11px",
+            letterSpacing: "0.16em",
+            color: "var(--ink-dim)",
+          }}
+        >
+          SIN SCORES AÚN — ¡SÉ EL PRIMERO!
         </div>
-        <div className="podium-slot bronze">
-          <div className="rank-num">#3</div>
-          <div className="name">{top3[2].name}</div>
-          <div className="score">{top3[2].score.toLocaleString()}</div>
-          <div className="date">{top3[2].date}</div>
-        </div>
-      </div>
-
-      {/* Full table */}
-      <div className="hall-table">
-        <div className="th">
-          <span>#</span>
-          <span>JUGADOR</span>
-          <span>PUNTUACIÓN</span>
-          <span>FECHA</span>
-        </div>
-
-        {scores.map((row, i) => (
-          <div
-            key={i}
-            className={[
-              "tr",
-              rankClass(i),
-              user && row.name === user.name ? "you" : "",
-            ]
-              .filter(Boolean)
-              .join(" ")}
-          >
-            <span className="rk">#{row.rank}</span>
-            <span className="pl">{row.name}</span>
-            <span className="sc">{row.score.toLocaleString()}</span>
-            <span className="dt">{row.date}</span>
-          </div>
-        ))}
-
-        {user && !userInTop && userRow && (
-          <>
-            <div className="tr you-label">— TU POSICIÓN —</div>
-            <div className="tr you">
-              <span className="rk">#{userRow.rank}</span>
-              <span className="pl">{userRow.name}</span>
-              <span className="sc">{userRow.score.toLocaleString()}</span>
-              <span className="dt">{userRow.date}</span>
+      ) : (
+        <>
+          {/* Podium top 3 */}
+          {top3.length >= 3 && (
+            <div className="podium">
+              <div className="podium-slot silver">
+                <div className="rank-num">#2</div>
+                <div className="name">{top3[1].player_name}</div>
+                {isGlobal && (
+                  <div className="date" style={{ fontSize: "9px", color: "var(--ink-dim)" }}>
+                    {top3[1].games?.title ?? "—"}
+                  </div>
+                )}
+                <div className="score">{top3[1].score.toLocaleString()}</div>
+                <div className="date">{formatDate(top3[1].created_at)}</div>
+              </div>
+              <div className="podium-slot gold">
+                <div className="rank-num">#1</div>
+                <div className="name">{top3[0].player_name}</div>
+                {isGlobal && (
+                  <div className="date" style={{ fontSize: "9px", color: "var(--ink-dim)" }}>
+                    {top3[0].games?.title ?? "—"}
+                  </div>
+                )}
+                <div className="score">{top3[0].score.toLocaleString()}</div>
+                <div className="date">{formatDate(top3[0].created_at)}</div>
+              </div>
+              <div className="podium-slot bronze">
+                <div className="rank-num">#3</div>
+                <div className="name">{top3[2].player_name}</div>
+                {isGlobal && (
+                  <div className="date" style={{ fontSize: "9px", color: "var(--ink-dim)" }}>
+                    {top3[2].games?.title ?? "—"}
+                  </div>
+                )}
+                <div className="score">{top3[2].score.toLocaleString()}</div>
+                <div className="date">{formatDate(top3[2].created_at)}</div>
+              </div>
             </div>
-          </>
-        )}
-      </div>
+          )}
+
+          {/* Full table */}
+          <div className={`hall-table${isGlobal ? " hall-table--global" : ""}`}>
+            <div className="th">
+              <span>#</span>
+              <span>JUGADOR</span>
+              {isGlobal && <span>JUEGO</span>}
+              <span>PUNTUACIÓN</span>
+              <span>FECHA</span>
+            </div>
+            {scores.map((row, i) => (
+              <div
+                key={row.id}
+                className={`tr ${rankClass(i)}`}
+                style={{ animationDelay: `${i * 35}ms` }}
+              >
+                <span className="rk">#{String(i + 1).padStart(2, "0")}</span>
+                <span className="pl">{row.player_name}</span>
+                {isGlobal && (
+                  <span className="dt" style={{ fontSize: "11px" }}>
+                    {row.games?.title ?? "—"}
+                  </span>
+                )}
+                <span className="sc">{row.score.toLocaleString()}</span>
+                <span className="dt">{formatDate(row.created_at)}</span>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
     </div>
   );
 }
