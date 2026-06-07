@@ -1,6 +1,6 @@
 # 06 — Leaderboard y tabla de juegos en Supabase
 
-**Estado:** Aprovado
+**Estado:** Implementado
 **Depende de:** 04-supabase-setup (clients de Supabase), 05-asteroides-jugable (flujo de guardado de scores)
 **Fecha:** 2026-06-06
 **Objetivo:** Crear las tablas `games` y `scores` en Supabase, migrar la app para leer juegos desde la DB (reemplazando `app/data.ts`), guardar scores en Supabase al terminar cada partida, migrar scores existentes de localStorage, y mostrar un leaderboard global y por juego en `/salon` y en cada página de juego.
