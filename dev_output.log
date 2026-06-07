@@ -1,0 +1,27 @@
+
+> arcade-vault@0.1.0 dev
+> next dev
+
+[32m✔[0m [33mConsole Ninja[0m extension is connected to [33mNext.js[0m, see [36mhttps://tinyurl.com/2vt8jxzw[0m
+▲ Next.js 16.2.6 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.56.1:3000
+- Environments: .env.local
+✓ Ready in 2.3s
+⚠ Console Ninja Turbopack support is a PRO feature, [33mcurrently available to community users while in preview[0m
+⚠ Warning: Next.js inferred your workspace root, but it may not be correct.
+ We detected multiple lockfiles and selected the directory of C:\Users\Ariel\yarn.lock as the root directory.
+ To silence this warning, set `turbopack.root` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
+   See https://nextjs.org/docs/app/api-reference/config/next-config-js/turbopack#root-directory for more information.
+ Detected additional lockfiles: 
+   * C:\Users\Ariel\Desktop\ClaudeCode\05-arcade-vault\package-lock.json
+
+
+ GET / 200 in 3.2s (next.js: 2.1s, application-code: 1077ms)
+ GET /biblioteca 200 in 1396ms (next.js: 409ms, application-code: 987ms)
+ GET /biblioteca 200 in 288ms (next.js: 30ms, application-code: 257ms)
+ GET /detalle/asteroides 200 in 4.4s (next.js: 4.1s, application-code: 270ms)
+ GET /player/asteroides 200 in 3.7s (next.js: 3.0s, application-code: 679ms)
+ GET /player/asteroides 200 in 4.2s (next.js: 3.6s, application-code: 693ms)
+ GET /biblioteca 200 in 440ms (next.js: 30ms, application-code: 410ms)
+ GET /player/asteroides 200 in 846ms (next.js: 151ms, application-code: 695ms)
