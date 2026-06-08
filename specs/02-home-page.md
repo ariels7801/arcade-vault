@@ -1,6 +1,6 @@
 # 02 — Home Page
 
-**Estado:** Implement
+**Estado:** Implementado
 **Depende de:** 01-mvp-visual (Nav, data.ts, globals.css, UserProvider)  
 **Fecha:** 2026-05-23  
 **Objetivo:** Implementar la home page en `/` con hero, features, games preview, stats, live activity, pricing y CTA final, usando datos mock hardcodeados.
@@ -8,6 +8,7 @@
 ## Scope
 
 ### Incluido
+
 - Reemplazar el redirect en `app/page.tsx` con el componente Home
 - Hero con eyebrow "INSERTA UNA MONEDA", título animado 3 líneas, CTA buttons
 - FloatingSilhouettes: 8 SVGs decorativos animados con neon colors
@@ -20,6 +21,7 @@
 - useReveal hook para animaciones scroll-triggered
 
 ### Fuera de scope
+
 - Home dinámica con datos reales de localStorage
 - Sección "Acerca de" (propia spec futura)
 - Internacionalización / i18n
@@ -28,17 +30,18 @@
 ## Data model
 
 Sin estructuras nuevas. Se reusan:
+
 - `Game` y `GAMES` de `app/data.ts` — para games preview (primeros 6)
 - Mock inline para live activity:
   ```ts
   const MOCK_SCORES = [
     { user: "PLAYER_1", game: "Space Invaders", score: 12400 },
     // ...5-7 entradas
-  ]
+  ];
   const MOCK_TOP_PLAYERS = [
     { rank: 1, user: "XERO_99", points: 98200 },
     // ...top 5
-  ]
+  ];
   ```
   Ambos arrays definidos en el mismo archivo, no exportados.
 

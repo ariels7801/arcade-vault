@@ -1,6 +1,6 @@
 # 03 — About Page + Contacto con Resend
 
-**Estado:** Approved
+**Estado:** Implementado
 **Depende de:** 01-mvp-visual (Nav, globals.css), 02-home-page (convenciones de estilo home)  
 **Fecha:** 2026-05-24  
 **Objetivo:** Implementar la página `/acerca-de` con hero, highlights, divider animado y formulario de contacto que envía correos a ariels7801@gmail.com vía Resend.
@@ -8,6 +8,7 @@
 ## Scope
 
 ### Incluido
+
 - Nueva ruta `app/acerca-de/page.tsx` con el componente About
 - About hero: kicker "▸ ACERCA DE", título, párrafo de misión
 - Highlight row: 3 cards con iconos SVG (HEART, BROWSER, PLANT)
@@ -24,6 +25,7 @@
 - CSS de about/contact/divider copiado de `references/templates/home-about/styles.css` a `globals.css`
 
 ### Fuera de scope
+
 - Dominio verificado en Resend (queda pendiente)
 - Rate limiting / anti-spam en el formulario
 - Guardar mensajes en base de datos
