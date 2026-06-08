@@ -9,6 +9,7 @@ objective: Implementar las 5 pantallas visuales de Arcade Vault (Biblioteca, Det
 ## Scope
 
 ### En scope
+
 - Nav component (logo, links, contador de créditos, botón auth, menú mobile)
 - Página `/` → redirige o renderiza Biblioteca
 - Página `/biblioteca` → grid de juegos con búsqueda y filtros por categoría
@@ -23,6 +24,7 @@ objective: Implementar las 5 pantallas visuales de Arcade Vault (Biblioteca, Det
 - Navegación con `next/navigation` (useRouter / Link)
 
 ### Fuera de scope
+
 - Juegos reales (ninguna lógica de juego)
 - Backend, base de datos, autenticación real
 - API routes
@@ -43,7 +45,7 @@ export interface Game {
   short: string;
   long: string;
   cat: GameCategory;
-  cover: string;       // CSS class name, e.g. "cover-bricks"
+  cover: string; // CSS class name, e.g. "cover-bricks"
   color: GameColor;
   best: number;
   plays: string;
@@ -53,19 +55,28 @@ export interface ScoreRow {
   rank: number;
   name: string;
   score: number;
-  date: string;        // "DD/MM/YYYY"
+  date: string; // "DD/MM/YYYY"
 }
 
 export interface User {
-  name: string;        // max 10 chars, uppercase
+  name: string; // max 10 chars, uppercase
 }
 
-export const GAMES: Game[] = [ /* 8 juegos del template */ ]
-export const CATS: string[] = ["TODOS", "ARCADE", "PUZZLE", "SHOOTER", "VERSUS"]
-export function seededScores(seed: number, count?: number): ScoreRow[]
+export const GAMES: Game[] = [
+  /* 8 juegos del template */
+];
+export const CATS: string[] = [
+  "TODOS",
+  "ARCADE",
+  "PUZZLE",
+  "SHOOTER",
+  "VERSUS",
+];
+export function seededScores(seed: number, count?: number): ScoreRow[];
 ```
 
 ### Estado cliente (no persistido en archivos)
+
 - `user: User | null` — localStorage key `av_user`
 - `scores: ScoreEntry[]` — localStorage key `av_scores`, shape `{ game, score, name, at }`
 

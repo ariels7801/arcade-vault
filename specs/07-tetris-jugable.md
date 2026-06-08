@@ -1,6 +1,6 @@
 # 07 — TETRIS jugable en /player/tetris
 
-**Estado:** Aprovado
+**Estado:** Implementado
 **Depende de:** 04-supabase-setup (clients de Supabase), 06-leaderboard-supabase (tablas games/scores)
 **Fecha:** 2026-06-07
 **Objetivo:** Portar TETRIS (`references/started-games/03-tetris/`) a un componente React/TS montado en `/player/tetris`, crear `lib/games/registry.ts` para eliminar el if-branch `isAsteroides` de `PlayerClient.tsx`, registrar el juego en Supabase, y exponerlo en el leaderboard global vía las tablas `games` y `scores` ya existentes.
