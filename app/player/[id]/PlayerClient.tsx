@@ -1,37 +1,25 @@
 "use client";
 
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import { useState } from "react";
 import type { Game } from "@/lib/types";
 import { createClient } from "@/lib/supabase/client";
 import { useUser } from "../../components/UserProvider";
-import AsteroidsCanvas from "../../../lib/games/asteroids/AsteroidsCanvas";
+import { GAME_REGISTRY } from "@/lib/games/registry";
 
 export default function PlayerClient({ game }: { game: Game }) {
   const { user } = useUser();
-  const isAsteroides = game.id === "asteroides";
+  const GameCanvas = GAME_REGISTRY[game.id] ?? null;
 
   const [score, setScore] = useState(0);
-  const [lives, setLives] = useState(3);
+  const [lives, setLives] = useState(0);
   const [level, setLevel] = useState(1);
   const [paused, setPaused] = useState(false);
   const [gameOver, setGameOver] = useState(false);
   const [initials, setInitials] = useState("");
   const [saved, setSaved] = useState(false);
 
-  useEffect(() => {
-    if (isAsteroides || paused || gameOver) return;
-    const interval = setInterval(() => {
-      setScore((prev) => {
-        const next = prev + Math.floor(Math.random() * 47 + 13);
-        setLevel(Math.floor(next / 5000) + 1);
-        return next;
-      });
-    }, 80);
-    return () => clearInterval(interval);
-  }, [isAsteroides, paused, gameOver]);
-
-  function handleAsteroidsGameOver(finalScore: number) {
+  function handleGameOver(finalScore: number) {
     setScore(finalScore);
     setGameOver(true);
   }
@@ -47,14 +35,12 @@ export default function PlayerClient({ game }: { game: Game }) {
   async function handleSave() {
     const name = initials.toUpperCase();
 
-    // Guardar en Supabase
     await createClient().from("scores").insert({
       game_id: game.id,
       player_name: name,
       score,
     });
 
-    // Fallback localStorage
     try {
       const existing = JSON.parse(localStorage.getItem("av_scores") ?? "[]");
       existing.push({ game: game.id, score, name, at: Date.now() });
@@ -76,10 +62,12 @@ export default function PlayerClient({ game }: { game: Game }) {
           <span className="l">PUNTOS</span>
           <span className="v neon-cyan">{score.toLocaleString()}</span>
         </div>
-        <div className="hud-stat lives">
-          <span className="l">VIDAS</span>
-          <span className="v">{"♥".repeat(lives)}</span>
-        </div>
+        {lives > 0 && (
+          <div className="hud-stat lives">
+            <span className="l">VIDAS</span>
+            <span className="v">{"♥".repeat(lives)}</span>
+          </div>
+        )}
         <div className="hud-stat level">
           <span className="l">NIVEL</span>
           <span className="v">{String(level).padStart(2, "0")}</span>
@@ -98,13 +86,13 @@ export default function PlayerClient({ game }: { game: Game }) {
       {/* CRT */}
       <div className="crt">
         <div className="crt-screen">
-          {isAsteroides ? (
-            <AsteroidsCanvas
+          {GameCanvas ? (
+            <GameCanvas
               paused={paused}
               onScoreChange={setScore}
               onLivesChange={setLives}
               onLevelChange={setLevel}
-              onGameOver={handleAsteroidsGameOver}
+              onGameOver={handleGameOver}
             />
           ) : (
             <div className="game-arena">

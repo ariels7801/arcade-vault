@@ -5,19 +5,8 @@
 export const W = 800;
 export const H = 600;
 
-export type GameState = "playing" | "dead" | "gameover";
-
-export interface EngineCallbacks {
-  onScoreChange?: (score: number) => void;
-  onLivesChange?: (lives: number) => void;
-  onLevelChange?: (level: number) => void;
-  onGameOver?: (finalScore: number) => void;
-}
-
-export interface InputState {
-  keys: Record<string, boolean>;
-  justPressed: Record<string, boolean>;
-}
+import type { GameState, EngineCallbacks, InputState } from "../types";
+export type { GameState, EngineCallbacks, InputState };
 
 const TRIPLE_SHOT_DURATION = 10;
 const TRIPLE_SPREAD = Math.PI / 12;
@@ -410,6 +399,7 @@ export class Engine {
     this.powerups = [];
     this.powerupSpawned = false;
     this.setScore(0);
+    this.lives = 0; // reset so setLives(3) triggers the callback
     this.setLives(3);
     this.setLevel(1);
     this.state = "playing";
