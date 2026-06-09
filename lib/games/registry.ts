@@ -9,4 +9,5 @@ export interface GameCanvasProps extends EngineCallbacks {
 export const GAME_REGISTRY: Record<string, ComponentType<GameCanvasProps>> = {
   asteroides: dynamic(() => import("./asteroids/AsteroidsCanvas")),
   tetris: dynamic(() => import("./tetris/TetrisCanvas")),
+  frogger: dynamic(() => import("./frogger/FroggerCanvas")),
 };
