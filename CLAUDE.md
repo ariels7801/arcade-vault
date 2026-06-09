@@ -62,6 +62,12 @@ RESEND_API_KEY=
 - Usa siempre `/frontend-design` para diseñar la interfaz de usuario.
 - Usa `/spec` y `/spec-impl` para diseño spec-driven de nuevas features.
 
+## Agents
+
+| Agent | File | When to use |
+|-------|------|-------------|
+| `game-planner` | `.claude/agents/game-planner.md` | Sugiere el siguiente juego a implementar. Analiza el catálogo, los specs existentes y la memoria persistente en `references/game-suggestions-todo.md`. Propone 1–3 candidatos razonados y actualiza el to-do. Úsalo cuando preguntes "qué juego sigue", "sugiéreme un juego" o "qué implementamos ahora". |
+
 ## Next.js 16 Breaking Changes
 
 This version has significant API changes from v15. Key differences:
