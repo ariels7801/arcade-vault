@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import type { ReactNode, MouseEvent, TouchEvent } from "react";
 import { Engine, CLASSIC_SKIN, RETRO_SKIN, NEON_SKIN, type EngineCallbacks, type AsteroidsSkin } from "./engine";
+import GamepadOverlay from "@/components/GamepadOverlay";
 
 const GAME_KEYS = ["Space", "ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"];
 
@@ -19,19 +19,6 @@ const SKIN_LABELS: Record<string, string> = {
   neon: "Neon",
 };
 
-interface TouchButtonConfig {
-  code: string;
-  label: ReactNode;
-  className?: string;
-}
-
-const MOVE_BUTTONS: TouchButtonConfig[] = [
-  { code: "ArrowLeft", label: "◀" },
-  { code: "ArrowUp", label: "▲" },
-  { code: "ArrowRight", label: "▶" },
-];
-
-const FIRE_BUTTON: TouchButtonConfig = { code: "Space", label: "●", className: "touch-btn-fire" };
 
 export interface AsteroidsCanvasProps extends EngineCallbacks {
   paused: boolean;
@@ -74,29 +61,7 @@ export default function AsteroidsCanvas({
     if (!input) return;
     input.keys[code] = false;
   }
-  function touchHandlers(code: string) {
-    return {
-      onTouchStart: (e: TouchEvent) => {
-        e.preventDefault();
-        pressVirtualKey(code);
-      },
-      onTouchEnd: (e: TouchEvent) => {
-        e.preventDefault();
-        releaseVirtualKey(code);
-      },
-      onMouseDown: (e: MouseEvent) => {
-        e.preventDefault();
-        pressVirtualKey(code);
-      },
-      onMouseUp: (e: MouseEvent) => {
-        e.preventDefault();
-        releaseVirtualKey(code);
-      },
-      onMouseLeave: () => releaseVirtualKey(code),
-    };
-  }
-
-  useEffect(() => {
+useEffect(() => {
     pausedRef.current = paused;
   }, [paused]);
 
@@ -156,71 +121,63 @@ export default function AsteroidsCanvas({
   }, []);
 
   return (
-    <div style={{ position: "relative", width: "100%", height: "100%" }}>
-      {/* Skin selector — only shown when no external skinKey is provided */}
-      {skinKeyProp === undefined && (
-        <div
-          style={{
-            position: "absolute",
-            top: 8,
-            right: 8,
-            zIndex: 20,
-            display: "flex",
-            gap: 4,
-          }}
-        >
-          {Object.keys(SKINS).map((key) => (
-            <button
-              key={key}
-              type="button"
-              onClick={() => setLocalSkinKey(key)}
-              style={{
-                padding: "2px 8px",
-                fontSize: 11,
-                fontFamily: "monospace",
-                letterSpacing: "0.05em",
-                cursor: "pointer",
-                border: `1px solid ${localSkinKey === key ? "#fff" : "rgba(255,255,255,0.3)"}`,
-                borderRadius: 3,
-                background: localSkinKey === key ? "rgba(255,255,255,0.15)" : "rgba(0,0,0,0.5)",
-                color: localSkinKey === key ? "#fff" : "rgba(255,255,255,0.55)",
-              }}
-            >
-              {SKIN_LABELS[key]}
-            </button>
-          ))}
-        </div>
-      )}
-
-      <canvas
-        ref={canvasRef}
-        width={800}
-        height={600}
-        style={{ width: "100%", height: "100%", display: "block" }}
-      />
-      <div className="touch-controls">
-        <div className="touch-cluster touch-cluster-move">
-          {MOVE_BUTTONS.map(({ code, label, className }) => (
-            <button
-              key={code}
-              type="button"
-              className={`touch-btn${className ? ` ${className}` : ""}`}
-              {...touchHandlers(code)}
-            >
-              {label}
-            </button>
-          ))}
-        </div>
-        <div className="touch-cluster touch-cluster-fire">
-          <button
-            type="button"
-            className={`touch-btn${FIRE_BUTTON.className ? ` ${FIRE_BUTTON.className}` : ""}`}
-            {...touchHandlers(FIRE_BUTTON.code)}
+    <div style={{ display: "flex", flexDirection: "column", width: "100%", height: "100%" }}>
+      <div style={{ position: "relative", width: "100%", aspectRatio: "800/600" }}>
+        {/* Skin selector — only shown when no external skinKey is provided */}
+        {skinKeyProp === undefined && (
+          <div
+            style={{
+              position: "absolute",
+              top: 8,
+              right: 8,
+              zIndex: 20,
+              display: "flex",
+              gap: 4,
+            }}
           >
-            {FIRE_BUTTON.label}
-          </button>
-        </div>
+            {Object.keys(SKINS).map((key) => (
+              <button
+                key={key}
+                type="button"
+                onClick={() => setLocalSkinKey(key)}
+                style={{
+                  padding: "2px 8px",
+                  fontSize: 11,
+                  fontFamily: "monospace",
+                  letterSpacing: "0.05em",
+                  cursor: "pointer",
+                  border: `1px solid ${localSkinKey === key ? "#fff" : "rgba(255,255,255,0.3)"}`,
+                  borderRadius: 3,
+                  background: localSkinKey === key ? "rgba(255,255,255,0.15)" : "rgba(0,0,0,0.5)",
+                  color: localSkinKey === key ? "#fff" : "rgba(255,255,255,0.55)",
+                }}
+              >
+                {SKIN_LABELS[key]}
+              </button>
+            ))}
+          </div>
+        )}
+        <canvas
+          ref={canvasRef}
+          width={800}
+          height={600}
+          style={{ width: "100%", height: "100%", display: "block" }}
+        />
       </div>
+      <GamepadOverlay
+        onUpPress={() => pressVirtualKey("ArrowUp")}
+        onUpRelease={() => releaseVirtualKey("ArrowUp")}
+        onLeftPress={() => pressVirtualKey("ArrowLeft")}
+        onLeftRelease={() => releaseVirtualKey("ArrowLeft")}
+        onRightPress={() => pressVirtualKey("ArrowRight")}
+        onRightRelease={() => releaseVirtualKey("ArrowRight")}
+        onActionAPress={() => pressVirtualKey("Space")}
+        onActionARelease={() => releaseVirtualKey("Space")}
+        onActionBPress={() => pressVirtualKey("ArrowDown")}
+        onActionBRelease={() => releaseVirtualKey("ArrowDown")}
+        labelA="●"
+        labelB="⌁"
+      />
     </div>
   );
 }
