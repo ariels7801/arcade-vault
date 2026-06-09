@@ -10,5 +10,6 @@
 | arkanoid  | —       | —     | —    | —           | —                  | —                    |
 | asteroids | ✅      | ✅    | ✅   | —           | sí                 | 2026-06-09           |
 | snake     | —       | —     | —    | —           | —                  | —                    |
+| frogger   | ✅      | ✅    | ✅   | —           | sí                 | 2026-06-09           |
 
 Leyenda: `✅` aplicado y verificado · `🟡` en progreso · `—` pendiente
