@@ -1,6 +1,6 @@
 # SPEC — Control táctil unificado para juegos en mobile (portrait)
 
-> **Estado:** Aprovado
+> **Estado:** Implementado
 > **Depende de:** 07-tetris-jugable
 > **Fecha:** 2026-06-09
 > **Objetivo:** Añadir un gamepad táctil unificado (d-pad + 2 botones de acción) debajo del canvas en todos los juegos funcionales cuando el dispositivo es touch, y ajustar el layout del shell `/player/[id]` para portrait mobile.

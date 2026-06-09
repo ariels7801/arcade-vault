@@ -5,6 +5,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 @AGENTS.md
 @.claude/agents/game-jam.md
 @.claude/agents/skin-designer.md
+@.claude/agents/mobile-porter.md
 
 ## Project
 
@@ -71,6 +72,7 @@ RESEND_API_KEY=
 | `game-planner` | `.claude/agents/game-planner.md` | Sugiere el siguiente juego a implementar. Analiza el catálogo, los specs existentes y la memoria persistente en `references/game-suggestions-todo.md`. Propone 1–3 candidatos razonados y actualiza el to-do. Úsalo cuando preguntes "qué juego sigue", "sugiéreme un juego" o "qué implementamos ahora". |
 | `game-jam` | `.claude/agents/game-jam.md` | Dado un tema, diseña un juego arcade nuevo y genera al menos dos specs completos en `specs/game-jam/<game-id>/`. Úsalo cuando digas "game jam: <tema>", "specs para un juego de <tema>" o pidas un brainstorm formalizado en specs. |
 | `skin-designer` | `.claude/agents/skin-designer.md` | Aplica los 3 skins canónicos (classic, retro, neon) a un juego concreto. Trabaja un juego a la vez; sigue el patrón de `TetrisGame.tsx`; registra progreso en `references/game-with-themes.md`. Úsalo cuando digas "aplica skins a <juego>", "añade skin <x> a <juego>" o "diseña los skins de <juego>". |
+| `mobile-porter` | `.claude/agents/mobile-porter.md` | Porta un juego concreto a mobile portrait: monta `GamepadOverlay`, escala el canvas responsive y verifica layout en 375px. Trabaja un juego a la vez; registra progreso en `references/mobile-ported-games.md`. Úsalo cuando digas "porta <juego> a mobile", "haz responsive <juego>" o "añade controles táctiles a <juego>". |
 
 ## Next.js 16 Breaking Changes
 
