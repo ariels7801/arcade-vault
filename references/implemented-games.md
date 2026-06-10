@@ -6,6 +6,7 @@ Games with a working canvas in `lib/games/` and registered in `GAME_REGISTRY`.
 |----|-------|----------|-------|-----------|-------|
 | `asteroides` | ASTEROIDES | SHOOTER | cyan | 221,400 | 33.5K |
 | `tetris` | TETRIS | PUZZLE | cyan | 28,400 | 11.7K |
+| `frogger` | FROGGER | ARCADE | green | — | — |
 
 ## In Database Only (not yet implemented)
 

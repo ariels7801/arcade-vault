@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useUser } from "../components/UserProvider";
+import { useUser } from "@/components/UserProvider";
 
 export default function AuthPage() {
   const [tab, setTab] = useState<"login" | "signup">("login");

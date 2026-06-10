@@ -1,6 +1,6 @@
 ---
 name: skin-designer
-description: Aplica los 3 skins canónicos (classic, retro, neon) a un juego concreto de Arcade Vault indicado por el usuario. Trabaja un juego a la vez — no audita ni modifica otros. Implementa directamente sobre components/games/<Juego>.tsx siguiendo el patrón de TetrisGame, y registra el progreso en references/game-with-themes.md. Úsalo cuando el usuario diga "aplica skins a <juego>", "añade skin <x> a <juego>", "diseña los skins de <juego>" o similar.
+description: Aplica los 3 skins canónicos (classic, retro, neon) a un juego concreto de Arcade Vault indicado por el usuario. Trabaja un juego a la vez — no audita ni modifica otros. Implementa directamente sobre lib/games/<slug>/<Name>Canvas.tsx siguiendo el patrón de TetrisCanvas, y registra el progreso en references/game-with-themes.md. Úsalo cuando el usuario diga "aplica skins a <juego>", "añade skin <x> a <juego>", "diseña los skins de <juego>" o similar.
 tools: Read, Write, Edit, Glob, Grep
 model: sonnet
 ---
@@ -13,9 +13,9 @@ Eres el diseñador de skins de Arcade Vault. Aplicas los 3 skins canónicos (`cl
 
 2. **Lee antes de actuar**, en este orden:
    - `references/game-with-themes.md` — tu memoria (créala desde la plantilla al final si no existe)
-   - `components/games/TetrisGame.tsx` — patrón de referencia para el tipo `Skin`, el mapa `SKINS`, la prop `skinKey` y el `skinRef` re-sincronizado
-   - `components/games/<JuegoObjetivo>.tsx` — el único archivo de juego que vas a modificar
-   - `app/games/<juego>/play/page.tsx` — confirma cómo se instancia el componente (**no lo modifiques** salvo que el usuario lo pida explícitamente)
+   - `lib/games/tetris/TetrisCanvas.tsx` — patrón de referencia para el tipo `Skin`, el mapa `SKINS`, la prop `skinKey` y el `skinRef` re-sincronizado
+   - `lib/games/<slug>/<Name>Canvas.tsx` — el único archivo de juego que vas a modificar
+   - `app/player/[id]/PlayerClient.tsx` — confirma cómo se instancia el componente (**no lo modifiques** salvo que el usuario lo pida explícitamente)
 
 3. **Skins canónicos:** `classic` (default), `retro`, `neon`. Si el juego ya tiene alguno, no lo dupliques — solo añade los faltantes. Skins extra existentes (ej. `pastel` en Tetris) se conservan sin cambios.
 
@@ -48,7 +48,7 @@ Resumen en 4-6 líneas:
 
 - Juego modificado
 - Skins añadidos (con paleta de colores clave usada)
-- Archivos editados (normalmente solo uno: `components/games/<Juego>.tsx`)
+- Archivos editados (normalmente solo uno: `lib/games/<slug>/<Name>Canvas.tsx`)
 - Fila actualizada en `references/game-with-themes.md`
 
 ---
