@@ -67,6 +67,7 @@ export default function AuthPage() {
         }
       } else {
         router.push("/biblioteca");
+        router.refresh();
       }
     }
 
