@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import type { Game } from "@/lib/types";
 import { createClient } from "@/lib/supabase/client";
-import { useUser } from "../../components/UserProvider";
+import { useUser } from "@/components/UserProvider";
 import { GAME_REGISTRY } from "@/lib/games/registry";
 
 export default function PlayerClient({ game }: { game: Game }) {

@@ -34,19 +34,28 @@ No test runner configured yet.
 | `/auth`         | Login/signup (client-side only, stores name in `UserProvider` context)                |
 | `/acerca-de`    | About + contact form (Resend API)                                                     |
 
+## Canonical Directory Convention
+
+| Aspect | Canonical path |
+|---|---|
+| Game canvas component | `lib/games/<slug>/<Name>Canvas.tsx` |
+| Game registry | `lib/games/registry.ts` → `GAME_REGISTRY` |
+| Engine types | `lib/games/types.ts` (`EngineCallbacks`, `GameCanvasProps`) |
+| Playable route (single) | `app/player/[id]/` — generic, registry-driven; no per-game pages |
+| Shared React components | `components/` (root), alias `@/components/...` |
+| Game DB type | `lib/types.ts` |
+
 ## Game Engine
 
 Games live in `lib/games/<slug>/` and are registered in `lib/games/registry.ts` as `GAME_REGISTRY`.
 
 Each canvas component receives `GameCanvasProps` (`EngineCallbacks` + `paused: boolean`).
 
-**Implemented games:** `asteroides` (Asteroids), `tetris` (Tetris)
+**Implemented games:** `asteroides` (Asteroids), `tetris` (Tetris), `frogger` (Cyber Frog)
 
-**Game-jam specs (approved/proposed, not yet implemented):** `specs/game-jam/frogger/` — Frogger (Cyber Frog)
+To add a new game: create `lib/games/<slug>/<Name>Canvas.tsx`, add `<slug>: dynamic(...)` to `GAME_REGISTRY`, insert a row in the Supabase `games` table. No per-game page needed — `app/player/[id]/` handles all games.
 
-To add a new game: create `lib/games/<slug>/` with a canvas component, export it from `registry.ts`, insert a row in the Supabase `games` table.
-
-see `references/implemented-games.md` when you need to check which games are implemented and how to implemented new ones.
+See `references/implemented-games.md` for the full catalog and implementation details.
 
 ## Database (Supabase)
 

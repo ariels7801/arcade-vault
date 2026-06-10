@@ -60,20 +60,12 @@ Eres el diseñador de especificaciones de Arcade Vault. Tu rol es tomar un **tem
    - INSERT SQL en tabla `games` con los 7 campos: `id, title, short, long, cat, cover, color`
      - `short`: una frase imperativa, acción + reto (≤ 60 chars)
      - `long`: dos frases de descripción jugable
-   - Interface TypeScript `<Name>GameProps`:
-     ```ts
-     interface <Name>GameProps {
-       paused: boolean;
-       onScoreChange: (score: number) => void;
-       onLivesChange: (lives: number) => void;
-       onLevelChange: (level: number) => void;
-       onGameOver: (finalScore: number) => void;
-     }
-     ```
-   - Componente `components/games/<Name>Game.tsx` — `"use client"`, canvas, game loop
-   - Play-page `app/games/<id>/play/page.tsx` con `dynamic(..., { ssr: false })`
-   - HUD doble (canvas interno + React externo) — explícito en Decisions
-   - Modal game over: pre-rellena desde `localStorage.getItem('av_player_name')`, inserta en Supabase `{ game_id: '<id>', player_name: name, score, user_id: null }`, persiste nombre
+   - Props: usa `GameCanvasProps` de `lib/games/types.ts` (ya incluye `paused`, `onScoreChange`, `onLivesChange`, `onLevelChange`, `onGameOver`). No defines una interfaz propia.
+   - Componente `lib/games/<slug>/<Name>Canvas.tsx` — `"use client"`, canvas, game loop
+   - Registro en `lib/games/registry.ts`: añadir `<slug>: dynamic(() => import("./<slug>/<Name>Canvas"))` a `GAME_REGISTRY`
+   - No hay play-page individual por juego. El shell genérico `app/player/[id]/` carga el canvas via `GAME_REGISTRY` automáticamente.
+   - HUD doble (canvas interno + React externo en `PlayerClient`) — explícito en Decisions
+   - Modal game over: `PlayerClient` lo gestiona; el canvas solo llama `onGameOver(score)`
    - Limpieza de event listeners en `return` del `useEffect`
    - Pausa controlada exclusivamente via prop `paused` (no P/Esc en canvas)
 

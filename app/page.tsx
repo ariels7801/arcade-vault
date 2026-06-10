@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import type { Game } from "@/lib/types";
 import { createClient } from "@/lib/supabase/client";
 import { useReveal } from "./hooks/useReveal";
-import { FloatingSilhouettes } from "./components/FloatingSilhouettes";
+import { FloatingSilhouettes } from "@/components/FloatingSilhouettes";
 
 const C = "currentColor";
 

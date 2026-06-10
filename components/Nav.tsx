@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
-import { useUser } from "./UserProvider";
+import { useUser } from "@/components/UserProvider";
 
 export default function Nav() {
   const pathname = usePathname();
