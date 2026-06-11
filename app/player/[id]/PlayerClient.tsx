@@ -3,9 +3,9 @@
 import Link from "next/link";
 import { useState } from "react";
 import type { Game } from "@/lib/types";
-import { createClient } from "@/lib/supabase/client";
 import { useUser } from "@/components/UserProvider";
 import { GAME_REGISTRY } from "@/lib/games/registry";
+import { saveScore } from "@/lib/actions/saveScore";
 
 export default function PlayerClient({ game }: { game: Game }) {
   const { user } = useUser();
@@ -16,8 +16,8 @@ export default function PlayerClient({ game }: { game: Game }) {
   const [level, setLevel] = useState(1);
   const [paused, setPaused] = useState(false);
   const [gameOver, setGameOver] = useState(false);
-  const [initials, setInitials] = useState("");
   const [saved, setSaved] = useState(false);
+  const [saveError, setSaveError] = useState("");
 
   function handleGameOver(finalScore: number) {
     setScore(finalScore);
@@ -33,21 +33,14 @@ export default function PlayerClient({ game }: { game: Game }) {
   }
 
   async function handleSave() {
-    const name = initials.toUpperCase();
-
-    await createClient().from("scores").insert({
-      game_id: game.id,
-      player_name: name,
-      score,
-    });
-
-    try {
-      const existing = JSON.parse(localStorage.getItem("av_scores") ?? "[]");
-      existing.push({ game: game.id, score, name, at: Date.now() });
-      localStorage.setItem("av_scores", JSON.stringify(existing));
-    } catch {}
-
-    setSaved(true);
+    if (!user || user.isGuest) return;
+    setSaveError("");
+    const result = await saveScore(game.id, score, user.name);
+    if ("error" in result) {
+      setSaveError(result.error);
+    } else {
+      setSaved(true);
+    }
   }
 
   return (
@@ -135,17 +128,16 @@ export default function PlayerClient({ game }: { game: Game }) {
             <div className="final-label">PUNTUACIÓN FINAL</div>
             <div className="final">{score.toLocaleString()}</div>
             <div className="input-row">
-              <input
-                maxLength={3}
-                placeholder="AAA"
-                value={initials}
-                onChange={(e) => setInitials(e.target.value.toUpperCase())}
-              />
-              <button className="btn yellow" onClick={handleSave} disabled={saved}>
-                GUARDAR
+              <button className="btn yellow" onClick={handleSave} disabled={saved || !user || user.isGuest}>
+                {saved ? "✓ GUARDADO" : "GUARDAR SCORE"}
               </button>
             </div>
             {saved && <span className="toast-saved">✓ SCORE GUARDADO</span>}
+            {saveError && (
+              <span className="mono" style={{ color: "var(--magenta)", fontSize: "10px" }}>
+                ⚠ {saveError}
+              </span>
+            )}
             <div className="actions">
               <Link href={`/detalle/${game.id}`} className="btn ghost">
                 VER DETALLE

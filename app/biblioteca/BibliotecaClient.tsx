@@ -68,7 +68,7 @@ export default function BibliotecaClient({ games }: { games: Game[] }) {
                 <div className="row">
                   <div className="score-badge">
                     <span>MEJOR</span>
-                    <b>{game.best.toLocaleString()}</b>
+                    <b>{game.best.toLocaleString('en-US')}</b>
                   </div>
                   <button className="btn" style={{ fontSize: "9px", padding: "8px 14px" }}>
                     VER
