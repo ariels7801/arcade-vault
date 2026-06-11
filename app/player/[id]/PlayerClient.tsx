@@ -3,9 +3,9 @@
 import Link from "next/link";
 import { useState } from "react";
 import type { Game } from "@/lib/types";
-import { createClient } from "@/lib/supabase/client";
 import { useUser } from "@/components/UserProvider";
 import { GAME_REGISTRY } from "@/lib/games/registry";
+import { saveScore } from "@/lib/actions/saveScore";
 
 export default function PlayerClient({ game }: { game: Game }) {
   const { user } = useUser();
@@ -17,6 +17,7 @@ export default function PlayerClient({ game }: { game: Game }) {
   const [paused, setPaused] = useState(false);
   const [gameOver, setGameOver] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [saveError, setSaveError] = useState("");
 
   function handleGameOver(finalScore: number) {
     setScore(finalScore);
@@ -33,15 +34,13 @@ export default function PlayerClient({ game }: { game: Game }) {
 
   async function handleSave() {
     if (!user || user.isGuest) return;
-
-    await createClient().from("scores").insert({
-      game_id: game.id,
-      score,
-      user_id: user.id!,
-      player_name: user.name,
-    });
-
-    setSaved(true);
+    setSaveError("");
+    const result = await saveScore(game.id, score, user.name);
+    if ("error" in result) {
+      setSaveError(result.error);
+    } else {
+      setSaved(true);
+    }
   }
 
   return (
@@ -134,6 +133,11 @@ export default function PlayerClient({ game }: { game: Game }) {
               </button>
             </div>
             {saved && <span className="toast-saved">✓ SCORE GUARDADO</span>}
+            {saveError && (
+              <span className="mono" style={{ color: "var(--magenta)", fontSize: "10px" }}>
+                ⚠ {saveError}
+              </span>
+            )}
             <div className="actions">
               <Link href={`/detalle/${game.id}`} className="btn ghost">
                 VER DETALLE

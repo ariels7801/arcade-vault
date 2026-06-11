@@ -27,9 +27,17 @@ export async function proxy(request: NextRequest) {
 
   const { data: { user } } = await supabase.auth.getUser();
 
+  // Usuario no autenticado intenta jugar → /auth
   if (!user && request.nextUrl.pathname.startsWith("/player/")) {
     const redirectUrl = request.nextUrl.clone();
     redirectUrl.pathname = "/auth";
+    return NextResponse.redirect(redirectUrl);
+  }
+
+  // Usuario ya autenticado intenta ir a /auth → /biblioteca
+  if (user && request.nextUrl.pathname === "/auth") {
+    const redirectUrl = request.nextUrl.clone();
+    redirectUrl.pathname = "/biblioteca";
     return NextResponse.redirect(redirectUrl);
   }
 

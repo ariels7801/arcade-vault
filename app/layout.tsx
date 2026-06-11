@@ -3,19 +3,22 @@ import "./globals.css";
 import Nav from "@/components/Nav";
 import UserProvider from "@/components/UserProvider";
 import ScoresMigrator from "@/components/ScoresMigrator";
+import { getSessionUser } from "@/lib/auth";
 
 export const metadata: Metadata = {
   title: "Arcade Vault",
   description: "Online gaming platform — players compete for points",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  const serverUser = await getSessionUser();
+
   return (
     <html lang="es" className="h-full">
       <body className="min-h-full flex flex-col">
-        <UserProvider>
+        <UserProvider initialUser={serverUser}>
           <div className="av-bg" />
           <div className="av-noise" />
           <ScoresMigrator />
