@@ -5,6 +5,8 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { useUser } from "@/components/UserProvider";
 
+const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z\d]).{8,}$/;
+
 type Tab = "login" | "signup";
 
 export default function AuthPage() {
@@ -32,6 +34,12 @@ export default function AuthPage() {
     if (tab === "signup") {
       const tag = username.toUpperCase().slice(0, 10);
       if (!tag) { setError("Elige un tag de jugador."); setLoading(false); return; }
+
+      if (!PASSWORD_REGEX.test(pass)) {
+        setError("La contraseña debe tener mínimo 8 caracteres e incluir mayúsculas, minúsculas, números y símbolos.");
+        setLoading(false);
+        return;
+      }
 
       const { error: signUpError } = await supabase.auth.signUp({
         email,
@@ -174,7 +182,7 @@ export default function AuthPage() {
               value={pass}
               onChange={(e) => setPass(e.target.value)}
               required
-              minLength={6}
+              minLength={8}
             />
           </div>
 

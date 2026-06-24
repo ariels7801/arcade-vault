@@ -37,7 +37,7 @@ export default function PlayerClient({ game }: { game: Game }) {
     setSaveError("");
     const result = await saveScore(game.id, score, user.name);
     if ("error" in result) {
-      setSaveError(result.error);
+      setSaveError(result.error ?? "Error desconocido");
     } else {
       setSaved(true);
     }
